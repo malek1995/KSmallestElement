@@ -73,9 +73,16 @@ def generateWorstCaseForFive(list):
     n = length - 1
     value = n
 
+    rest_elements = length % 5
     # Handle last chunk if it includes less than 3 elements
-    if length % 5 < 3:
-        list[-1].value = value
+    if rest_elements != 0:
+        if rest_elements == 1 or rest_elements == 2:
+            list[-1].value = value
+        else:
+            list[-1].value = value
+            value -= 1
+            list[-2].value = value
+            n -= 1
         value -= 1
         n -= 1
 
@@ -110,15 +117,29 @@ def generateWorstCaseForSeven(list):
     n = length - 1
     value = n
 
+    rest_elements = length % 7
     # Handle last chunk if it includes less than 4 elements
-    if length % 7 < 4:
-        list[-1].value = value
-        value -= 1
+    if rest_elements != 0:
+        if rest_elements == 1 or rest_elements == 2:
+            list[-1].value = value
+        elif rest_elements == 3 or rest_elements == 4:
+            list[-1].value = value
+            value -= 1
+            list[-2].value = value
+            n -= 1
+        else:
+            list[-1].value = value
+            value -= 1
+            list[-2].value = value
+            value -= 1
+            list[-3].value = value
+            n -= 2
         n -= 1
+        value -= 1
 
     # Handle the rest elements
     while n >= median_pos:
-        if n % 7 == 0 or (n - 1) % 7 == 0 or (n-2) % 7 == 0:
+        if (n % 7 == 0) or ((n - 1) % 7 == 0) or ((n-2) % 7 == 0):
             smaller_elements_pos.append(n)
         else:
             list[n].value = value
@@ -130,8 +151,9 @@ def generateWorstCaseForSeven(list):
     return generateWorstCaseForSeven(list)
 
 
-list_1 = generateListOfElements(27)
-list_2 = createChangerList(list_1)
+if __name__ == '__main__':
+    list_1 = generateListOfElements(27)
+    list_2 = createChangerList(list_1)
 
-generateWorstCaseForSeven(list_2)
-print(list_1)
+    generateWorstCaseForSeven(list_2)
+    print(list_1)
